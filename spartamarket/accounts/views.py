@@ -1,8 +1,12 @@
 from django.shortcuts import render
-
+from django.contrib.auth.forms import AuthenticationForm
 
 # Create your views here.
 
 
-# 로그인 get과 post로 할때 
+def login(request):
+    
+    form = AuthenticationForm()
+    context = {"form": form}
+    return render(request, "accounts/login.html", context)
 
