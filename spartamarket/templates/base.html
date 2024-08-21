@@ -12,8 +12,21 @@
 
 </head>
 <body>
+        <div class="navbar">
+    <a href="{% url 'accounts:signup' %}"><button>회원가입</button></a>
+        <a href="{% url 'accounts:login' %}"><button>로그인</button></a>
+
+        <form action="{% url 'accounts:logout' %}" method="POST">
+            {% csrf_token %}
+            <input type="submit" value="로그아웃">
+            </form>
+
+    </div>
+
+        <p>hello, {{ request.user.username }}</p>
     {% block content %}
-    
+
+
     {% endblock content %}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
