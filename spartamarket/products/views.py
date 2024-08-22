@@ -27,3 +27,9 @@ def create(request):
         form = CreatedForm()
     context = {"form": form}
     return render(request, "products/create.html", context)
+
+
+def delete(request, pk):
+    product = Article.objects.get(pk=pk)
+    product.delete()
+    return redirect("articles")
