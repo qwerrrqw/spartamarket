@@ -31,7 +31,8 @@ def signup(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            auth_login(request, user)
             return redirect("index")
     else:
         form = CustomUserCreationForm()
@@ -50,3 +51,9 @@ def update(request):
         form = CustomUserChangeForm(instance=request.user)
     context = {"form":form}
     return render(request, "accounts/update.html", context)
+
+def delete(request):
+    if request.user.is_authenticated:
+        request.user.delete()
+        auth_logout(request)
+    return redirect("index")
