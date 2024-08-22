@@ -19,11 +19,13 @@ def login(request):
     context = {"form": form}
     return render(request, "accounts/login.html", context)
 
+
 def logout(request):
     if request.method == "POST":
         auth_logout(request)
         return redirect("index")
-    
+
+
 def index(request):
     return render(request, "accounts/index.html")
 
@@ -41,6 +43,7 @@ def signup(request):
         "form": form,
     }
     return render(request, "accounts/signup.html", context)
+
 
 def update(request):
     if request.method == "POST":
