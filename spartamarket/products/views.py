@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import CreatedForm
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 
 from .models import Article
 
@@ -21,15 +22,23 @@ def create(request):
         form = CreatedForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("index")
+            return redirect("products:product")
 
     else:
         form = CreatedForm()
     context = {"form": form}
     return render(request, "products/create.html", context)
 
+def product_detail(request, pk):
+    product = get_object_or_404(Article, pk=pk)
+    context = { 'product':product}
+    return render(request, 'products/product_detail.html', context)
+
+
+
 
 def delete(request, pk):
     product = Article.objects.get(pk=pk)
     product.delete()
-    return redirect("articles")
+    return redirect("products:product")
+
