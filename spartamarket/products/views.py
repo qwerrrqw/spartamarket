@@ -42,3 +42,18 @@ def delete(request, pk):
     product.delete()
     return redirect("products:product")
 
+
+def edit(request, pk):
+    product = get_object_or_404(Article, pk=pk)
+    context = {
+        "product" : product,
+    }
+    return render(request, "products/edit.html", context)
+
+
+def update(request, pk):
+    product = get_object_or_404(Article, pk=pk)
+    product.title = request.POST.get("title")
+    product.content = request.POST.get("content")
+    product.save()
+    return redirect("products:product_detail", product.pk)
