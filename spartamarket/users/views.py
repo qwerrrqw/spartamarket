@@ -35,7 +35,10 @@ def like(request, pk):
 
 
 def follow(request, user_id):
-    member = get_object_or_404(get_object_or_404(), id=user_id)
+    member = get_user_model().objects.get(id=user_id)
+    print(member)
+    print(dir(member))
+    print(member.profile)
     if  member.followers.filter(pk=request.user.pk).exists():
         member.followers.remove(request.user)
     else:
