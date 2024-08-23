@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
-
 from django.contrib.auth import get_user_model
 
 from products.models import Article
@@ -10,15 +9,17 @@ from .models import Profile
 
 
 def profile(request, user_id):
-    user = request.user
-    # products = user.like_users.filter(user_id=user)
-
-    my_user = get_object_or_404(get_user_model(), id=user_id)
-    products = my_user.like_articles.all()
-
+    user = request.user # 로그인된 사용자
+    member = get_object_or_404(get_user_model(), id=user_id) #my_user를 member로 변경, 프로필 주인
+    products = member.like_articles.all() # member로 변경
+    profile_user = get_object_or_404(Profile, user_id=user_id)
+    followers_count = profile_user.followers.count()
     context = {
-        "user": my_user,
+        "user": user, #my_user를 user로 변경
         "products": products,
+        "member": member, # "member": member 추가
+        'profile_user': profile_user,
+        "followers_count": followers_count,
     }
     return render(request, 'users/profile.html', context)
 
@@ -35,12 +36,12 @@ def like(request, pk):
 
 
 def follow(request, user_id):
-    member = get_user_model().objects.get(id=user_id)
-    print(member)
-    print(dir(member))
-    print(member.profile)
-    if  member.followers.filter(pk=request.user.pk).exists():
-        member.followers.remove(request.user)
+    member = get_object_or_404(Profile, user__id=user_id)  # Profile 모델과 user__id로 필터링하여 객체 가져오기
+    user_profile = request.user.profile  # 로그인된 사용자의 프로필을 가져오기
+
+    if user_profile in member.followers.all():
+        member.followers.remove(user_profile)
     else:
-        member.followers.add(request.user)
-    return redirect('users:profile', member.username)
+        member.followers.add(user_profile)
+    
+    return redirect('users:profile', user_id=user_id)

@@ -3,38 +3,48 @@
 
 {% block head %}
 
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
 {% endblock head %}
 
-
 {% block content %}
-    <h1> {{ user.username }} </h1>
-    
-    <p> 가입일: {{ user.date_joined }}</p>
+  <h1>
+    {{ member.username }}
+  </h1>
+  <!-- << member.username으로 수정 -->
 
-    <img src=" {% static 'users/user.png' %}">
+  <p>
+    가입일:
+    {{ member.date_joined }}</p>
+  <!-- << member.date_joined으로 수정 -->
 
-    <div>
-            <p>게시글 목록</p>
-        {% for product in products %}
-            <a href="{% url 'products:product_detail' product.pk %}">
-            <li>{{ product.title }}</li>
-            </a>
-        {% endfor %}
+  <img src=" {% static 'users/user.png' %}">
 
+  <div>
+    <p>게시글 목록</p>
+    {% for product in products %}
+      <a href="{% url 'products:product_detail' product.pk %}">
+        <li>{{ product.title }}</li>
+      </a>
+    {% endfor %}
 
-    </div>
-
-    <form action="{% url 'users:follow' user.pk %}" method="POST">
+  </div>
+  <p>Followers: {{ followers_count }}</p>
+  {% if profile_user.user %}
+    {% if request.user.profile in profile_user.followers.all %}
+      <form action="{% url 'users:follow' profile_user.user.id %}" method="post">
         {% csrf_token %}
-        {% if user in member.followers.all %}
-        <button type="submit">팔로우중</button>
-        {% else %}
+        <button type="submit">언팔로우</button>
+      </form>
+    {% else %}
+      <form action="{% url 'users:follow' profile_user.user.id %}" method="post">
+        {% csrf_token %}
         <button type="submit">팔로우</button>
-        {% endif %}
-
-    </form>
+      </form>
+    {% endif %}
+  {% else %}
+    <p>사용자 정보가 잘못되었습니다.</p>
+  {% endif %}
+</form>
 
 {% endblock content %}
-
