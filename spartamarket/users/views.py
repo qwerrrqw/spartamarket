@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 
 from products.models import Article
+from .models import Profile
 
 # Create your views here.
 
@@ -31,3 +32,12 @@ def like(request, pk):
         product.like_users.add(request.user)
         print("like_true")
     return redirect("products:product_detail", pk=pk)
+
+
+def follow(request, user_id):
+    member = get_object_or_404(get_object_or_404(), id=user_id)
+    if  member.followers.filter(pk=request.user.pk).exists():
+        member.followers.remove(request.user)
+    else:
+        member.followers.add(request.user)
+    return redirect('users:profile', member.username)
