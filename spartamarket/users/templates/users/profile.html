@@ -15,5 +15,15 @@
 
     <img src=" {% static 'users/user.png' %}">
 
+    <div>
+            <p>게시글 목록</p>
+        {% for product in products %}
+            <a href="{% url 'products:product_detail' product.pk %}">
+            <li>{{ product.title }}</li>
+            </a>
+        {% endfor %}
+
+    </div>
+
 {% endblock content %}
 

@@ -3,5 +3,6 @@ from . import views
 
 app_name = "users"
 urlpatterns = [
-    path("<int:pk>/", views.profile, name="profile")
+    path("<int:user_id>/", views.profile, name="profile"),
+    path("like/<int:pk>/", views.like, name="like"),
 ]

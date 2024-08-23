@@ -23,11 +23,7 @@ def login(request):
 def logout(request):
     if request.method == "POST":
         auth_logout(request)
-        return redirect("index")
-
-
-def index(request):
-    return render(request, "accounts/index.html")
+        return redirect("products:product")
 
 
 def signup(request):
@@ -36,7 +32,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             auth_login(request, user)
-            return redirect("index")
+            return redirect("products:product")
     else:
         form = CustomUserCreationForm()
     context = {
@@ -50,7 +46,7 @@ def update(request):
         form = CustomUserChangeForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
-            return redirect("index")
+            return redirect("products:product")
     else:
         form = CustomUserChangeForm(instance=request.user)
     context = {"form":form}
@@ -60,7 +56,7 @@ def delete(request):
     if request.user.is_authenticated:
         request.user.delete()
         auth_logout(request)
-    return redirect("index")
+    return redirect("products:product")
 
 def password_change(request):
     if request.method == "POST":
@@ -68,7 +64,7 @@ def password_change(request):
         if form.is_valid():
             form.save()
             update_session_auth_hash(request, form.user)
-            return redirect("index")
+            return redirect("products:product")
     else:    
         form = PasswordChangeForm(request.user)
     context = {"form": form}

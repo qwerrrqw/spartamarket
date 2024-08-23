@@ -5,6 +5,15 @@
 
 <p>제목 {{product.title}}</p>
 <p>작성자 {{request.user.username}}</p>
+
+    <form action="{% url 'users:like' product.pk %}" method="POST">
+    {% csrf_token %}
+    {% if request.user in product.like_users.all %}
+        <button type="sumbit">좋아요 누른 상태</button>
+        {% else %}
+        <button type="sumbit">좋아요 안 누른 상태</button>
+    {% endif %} 
+    </form>
 <p>내용 {{product.content}}</p>
 
 <form action="{% url 'products:delete' product.pk %}" method="POST">
