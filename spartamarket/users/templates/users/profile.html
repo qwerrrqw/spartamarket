@@ -15,7 +15,6 @@
 
     <img src=" {% static 'users/user.png' %}">
     
-    
     {% if now_user != member %}
     <form action="{% url 'users:follow' member.user.id %}" method="POST">
     {% csrf_token %}
@@ -50,6 +49,9 @@
     {% endfor %}
 
     </div>
+
+    <a href="{% url 'accounts:update' %}"><button>회원정보 수정</button></a>
+    <a href="{% url 'products:product' %}"><button>홈으로 돌아가기</button></a>
 
 {% endblock content %}
 

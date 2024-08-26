@@ -60,6 +60,7 @@ def delete(request):
         auth_logout(request)
     return redirect("products:product")
 
+
 def password_change(request):
     if request.method == "POST":
         form = PasswordChangeForm(request.user, request.POST)

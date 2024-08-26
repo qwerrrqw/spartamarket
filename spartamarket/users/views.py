@@ -3,12 +3,15 @@ from django.shortcuts import get_object_or_404
 
 from django.contrib.auth import get_user_model
 
+from django.contrib.auth.decorators import login_required
+
 from products.models import Article
 from .models import Profile
 
 # Create your views here.
 
 
+@login_required
 def profile(request, user_id):
     user = get_object_or_404(get_user_model(), id=user_id)
 
@@ -27,6 +30,7 @@ def profile(request, user_id):
     return render(request, 'users/profile.html', context)
 
 
+@login_required
 def like(request, pk):
     product = get_object_or_404(Article, pk=pk)
     if product.like_users.filter(pk=request.user.pk).exists():
