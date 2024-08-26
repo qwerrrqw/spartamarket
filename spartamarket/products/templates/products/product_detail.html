@@ -13,6 +13,8 @@
         {% else %}
         <button type="sumbit">좋아요 안 누른 상태</button>
     {% endif %} 
+    
+    <p>좋아요 수 : {{ product.like_users.count }}</p>
     </form>
 <p>내용 {{product.content}}</p>
 

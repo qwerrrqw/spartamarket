@@ -14,7 +14,7 @@ def login(request):
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
             auth_login(request, form.get_user())
-            return redirect("index")
+            return redirect("products:product")
     else:
         form = AuthenticationForm()
     context = {"form": form}

@@ -31,10 +31,10 @@ def like(request, pk):
     product = get_object_or_404(Article, pk=pk)
     if product.like_users.filter(pk=request.user.pk).exists():
         product.like_users.remove(request.user)
-        print("like_false")
+        # product.like_count -= 1
     else:
         product.like_users.add(request.user)
-        print("like_true")
+        # product.like_count += 1
     return redirect("products:product_detail", pk=pk)
 
 

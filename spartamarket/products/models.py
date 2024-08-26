@@ -17,3 +17,4 @@ class Article(models.Model):
     )
 
     like_users = models.ManyToManyField(to=settings.AUTH_USER_MODEL, related_name="like_articles")
+    # like_count = models.PositiveIntegerField(default=0)
