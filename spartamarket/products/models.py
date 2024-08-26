@@ -10,4 +10,10 @@ class Article(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     image = models.ImageField(upload_to="images/", blank=True)
 
+    author = models.ForeignKey(
+        to=settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="articles",
+    )
+
     like_users = models.ManyToManyField(to=settings.AUTH_USER_MODEL, related_name="like_articles")

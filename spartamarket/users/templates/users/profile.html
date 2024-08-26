@@ -9,19 +9,45 @@
 
 
 {% block content %}
-    <h1> {{ user.username }} </h1>
+    <h1> {{ member.user.username }} </h1>
 
-    <p> 가입일: {{ user.date_joined }}</p>
+    <p> 가입일: {{ member.user.date_joined }}</p>
 
     <img src=" {% static 'users/user.png' %}">
+    
+    
+    {% if now_user != member %}
+    <form action="{% url 'users:follow' member.user.id %}" method="POST">
+    {% csrf_token %}
+
+        {% if now_user in member.followers.all %}
+            <input type="submit" value="팔루우중">
+        {% else %}
+            <input type="submit" value="팔로우하기">
+        {% endif %}
+
+    </form>
+    {% endif %}
 
     <div>
-            <p>게시글 목록</p>
-        {% for product in products %}
-            <a href="{% url 'products:product_detail' product.pk %}">
-            <li>{{ product.title }}</li>
-            </a>
-        {% endfor %}
+    <p>가입일 : {{ member.user.date_joined }}</p>
+    <p>팔로우수 : {{ member.followings.count }}</p>
+    <p>팔로워수 : {{ member.followers.count }}</p>
+    </div>
+
+    <div>
+        <h4>{{ member.user.username }}님이 좋아요한 게시물</h4>
+    {% for like_post in like_posts %}
+    	<li><a href="{% url 'products:detail' like_post.pk %}">{{ like_post.title }}</a></li>
+    {% endfor %}
+
+    </div>
+
+    <div>
+        <h4>{{ member.user.username }}님이 작성한 게시물</h4>
+    {% for write_post in write_posts %}
+    	<li><a href="{% url 'products:detail' write_post.pk %}">{{ write_post.title }}</a></li>
+    {% endfor %}
 
     </div>
 
