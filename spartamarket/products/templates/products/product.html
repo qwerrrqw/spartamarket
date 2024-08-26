@@ -13,6 +13,11 @@
             </select>
             <button type="submit">정렬하기</button>
         </form>
+
+    <form action="{% url 'products:search' %}" method="GET">
+    {{ search_form.as_p}}
+        <button type="submit">검색</button>
+    </form>
     
     {% for article in articles %}
         <a href="{% url 'products:product_detail' article.pk %}">

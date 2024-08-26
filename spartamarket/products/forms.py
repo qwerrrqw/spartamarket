@@ -1,6 +1,7 @@
 from django import forms
 from .models import Article
 
+
 class CreatedForm(forms.ModelForm):
     class Meta:
         model = Article
@@ -9,3 +10,7 @@ class CreatedForm(forms.ModelForm):
             "author",
             "like_users",
         )
+
+
+class SearchForm(forms.Form):
+    search_word = forms.CharField(label="검색")

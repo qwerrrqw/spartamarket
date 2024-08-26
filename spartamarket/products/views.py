@@ -1,7 +1,7 @@
-from django.db.models import Count
+from django.db.models import Count, Q
 
 from django.shortcuts import render, redirect
-from .forms import CreatedForm
+from .forms import CreatedForm, SearchForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 
@@ -15,10 +15,11 @@ def product(request):
     else:
         articles = Article.objects.all().order_by("-created_at") # 기본 정렬 : 최신순
 
-    # articles = Article.objects.all().order_by("-created_at") # 기본 정렬 : 최신순
+    search_form = SearchForm()
 
     context = {
         "articles": articles,
+        "search_form": search_form,
     }
     return render(request, "products/product.html", context)
 
@@ -28,9 +29,6 @@ def product(request):
 def create(request):
     if request.method == "POST":
         form = CreatedForm(request.POST, request.FILES)
-        print("=========================")
-        print(form.is_valid())
-        print("=========================")
         if form.is_valid():
             article = form.save(commit=False)
             article.author = request.user
@@ -47,8 +45,6 @@ def product_detail(request, pk):
     product = get_object_or_404(Article, pk=pk)
     context = {'product': product}
     return render(request, 'products/product_detail.html', context)
-
-
 
 
 def delete(request, pk):
@@ -71,3 +67,20 @@ def update(request, pk):
     product.content = request.POST.get("content")
     product.save()
     return redirect("products:product_detail", product.pk)
+
+
+def search(request):
+    search_word = request.GET.get("search_word")
+    article_list = Article.objects.filter(
+        Q(title__icontains=search_word) |
+        Q(content__icontains=search_word) |
+        Q(author__username__icontains=search_word)
+        # 해시태그 추가 필요
+    ).distinct()
+
+    context = {
+        "search_word": search_word,
+        "article_list": article_list,
+    }
+
+    return render(request, "products/search.html", context)
