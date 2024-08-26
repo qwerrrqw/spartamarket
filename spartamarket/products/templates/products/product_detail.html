@@ -6,6 +6,12 @@
 <p>제목 {{product.title}}</p>
 <p>작성자 {{request.user.username}}</p>
 
+<p>해시태그: 
+    {% for hashtag in hashtags %}
+        <a href="{% url 'products:hashtag' hashtag.pk %}">#{{ hashtag.content }}</a> 
+    {% endfor %}
+</p>
+
     <form action="{% url 'users:like' product.pk %}" method="POST">
     {% csrf_token %}
     {% if request.user in product.like_users.all %}

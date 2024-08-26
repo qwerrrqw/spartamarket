@@ -10,4 +10,6 @@ urlpatterns = [
     path("<int:pk>/edit/",views.edit, name="edit"),
     path("<int:pk>/update/", views.update, name="update"),
     path("search/", views.search, name="search"),
+    path('hashtag/<int:hash_pk>/', views.hashtag, name='hashtag'),
+
 ]

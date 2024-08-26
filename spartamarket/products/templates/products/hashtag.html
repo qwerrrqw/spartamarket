@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>#{{ hashtag.content }} 관련 게시글</h1>
+<ul>
+    {% for product in products %}
+        <li><a href="{% url 'products:product_detail' product.pk %}">{{ product.title }}</a></li>
+    {% empty %}
+        <li>해당 해시태그와 관련된 게시글이 없습니다.</li>
+    {% endfor %}
+</ul>
+
+{% endblock content %}

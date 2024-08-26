@@ -5,7 +5,7 @@ from .forms import CreatedForm, SearchForm
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 
-from .models import Article
+from .models import Article, Hashtag
 
 
 def product(request):
@@ -21,11 +21,12 @@ def product(request):
         "articles": articles,
         "search_form": search_form,
     }
+
     return render(request, "products/product.html", context)
 
 
-@login_required()
-# Create your views here.
+# Create view
+@login_required
 def create(request):
     if request.method == "POST":
         form = CreatedForm(request.POST, request.FILES)
@@ -33,8 +34,17 @@ def create(request):
             article = form.save(commit=False)
             article.author = request.user
             article.save()
-            return redirect("products:product_detail", article.pk)
 
+            # 해시태그 파싱 및 저장
+            hashtags_input = form.cleaned_data.get('hashtags', '')
+            hashtags = set(word for word in hashtags_input.split() if word.startswith('#'))
+            for hashtag in hashtags:
+                cleaned_hashtag = hashtag.strip("#")
+                if cleaned_hashtag:
+                    hashtag_obj, created = Hashtag.objects.get_or_create(content=cleaned_hashtag)
+                    article.hashtags.add(hashtag_obj)
+            article.save()
+            return redirect("products:product_detail", article.pk)
     else:
         form = CreatedForm()
     context = {"form": form}
@@ -43,7 +53,13 @@ def create(request):
 
 def product_detail(request, pk):
     product = get_object_or_404(Article, pk=pk)
-    context = {'product': product}
+    hashtags = product.hashtags.all() 
+    context = { 
+            'product':product,
+            'hashtags': hashtags,
+            }
+    
+
     return render(request, 'products/product_detail.html', context)
 
 
@@ -61,12 +77,38 @@ def edit(request, pk):
     return render(request, "products/edit.html", context)
 
 
+# Update view
+@login_required
 def update(request, pk):
     product = get_object_or_404(Article, pk=pk)
+
     product.title = request.POST.get("title")
     product.content = request.POST.get("content")
     product.save()
-    return redirect("products:product_detail", product.pk)
+    
+    if request.method == "POST":
+        form = CreatedForm(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            article = form.save(commit=False)
+            article.author = request.user
+            article.save()
+
+            # 기존 해시태그를 지우고 새로 추가
+            article.hashtags.clear()
+            hashtags_input = form.cleaned_data.get('hashtags', '')
+            hashtags = set(word for word in hashtags_input.split() if word.startswith('#'))
+            for hashtag in hashtags:
+                cleaned_hashtag = hashtag.strip("#")
+                if cleaned_hashtag:
+                    hashtag_obj, created = Hashtag.objects.get_or_create(content=cleaned_hashtag)
+                    article.hashtags.add(hashtag_obj)
+                    
+            return redirect("products:product_detail", article.pk)
+    else:
+        form = CreatedForm(instance=product)
+    context = {"form": form, "product": product}
+    return render(request, "products/edit.html", context)
+
 
 
 def search(request):
@@ -84,3 +126,16 @@ def search(request):
     }
 
     return render(request, "products/search.html", context)
+
+
+
+
+@login_required
+def hashtag(request, hash_pk):
+    hashtag = get_object_or_404(Hashtag, pk=hash_pk)
+    products = Article.objects.filter(hashtags=hashtag).order_by('-pk')
+    context = {
+        "hashtag": hashtag,
+        "products": products,
+    }
+    return render(request, 'products/hashtag.html', context)
