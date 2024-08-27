@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<style>
+    .hashtag-header {
+        font-size: 1.25rem; /* 글자 크기를 약간 키움 */
+        font-weight: bold;
+        text-align: left; /* 좌측 정렬 */
+        margin-bottom: 20px; /* 해시태그와 제품 목록 사이에 여백 추가 */
+    }
+</style>
+{% endblock head %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container px-4 px-lg-5 mt-5">
+        <!-- 해시태그 표시 -->
+        {% if hashtag %}
+            <div class="row mb-4">
+                <div class="col">
+                    <div class="hashtag-header">검색된 해시태그: #{{ hashtag }}</div>
+                </div>
+            </div>
+        {% endif %}
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            {% for product in products %}
+                <div class="col mb-5">
+                    <div class="card h-100">
+                        {% if product.is_sale %}
+
+                            <div class="badge bg-dark text-white position-absolute" style="top: 0.5rem; right: 0.5rem">Sale</div>
+                        {% endif %}
+
+                        <img class="card-img-top {% if not product.image %}no-image{% endif %}" src="{% if product.image %}{{ product.image.url }}{% else %}data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='450' height='300' viewBox='0 0 450 300'%3E%3Crect width='100%' height='100%' fill='%23dee2e6'/%3E%3C/svg%3E{% endif %}" alt="{{ product.title }}">
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <h5 class="fw-bolder">{{ product.title }}</h5>
+                                {% if product.rating %}
+                                    <div class="d-flex justify-content-center small text-warning mb-2">
+                                        {% for star in product.rating %}
+                                            <div class="bi-star-fill"></div>
+                                        {% endfor %}
+                                        {% for star in product.max_rating|slice:":5"|slice:":5"|length|slice:":5"|slice:":5"|length %}
+                                            <div class="bi-star"></div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+
+                                {% if product.discounted_price %}
+                                    <span class="text-muted text-decoration-line-through">${{ product.original_price }}</span>
+                                    ${{ product.discounted_price }}
+                                {% else %}
+                                    ${{ product.original_price }}
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center">
+                                <a class="btn btn-outline-dark mt-auto" href="{% url 'products:product_detail' product.pk %}">View options</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col mb-5">
+                    <div class="text-center">
+                        <p class="fw-bold">해당 해시태그와 관련된 게시글이 없습니다.</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock content %}
