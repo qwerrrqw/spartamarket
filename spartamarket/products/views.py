@@ -68,24 +68,6 @@ def delete(request, pk):
     return redirect("products:product")
 
 
-
-@login_required
-def edit(request, pk):
-    product = get_object_or_404(Article, pk=pk)
-    if request.method == "POST":
-        form = CreatedForm(request.POST, request.FILES, instance=product)  # FIlES 추가
-        if form.is_valid():
-            form.save()
-            return redirect("products:product_detail", product.pk)
-    else:
-        form = CreatedForm(instance=product)
-    context = {
-        "product": product,
-        "form": form,
-    }
-    return render(request, "products/edit.html", context)
-
-
 @login_required
 def update(request, pk):
     product = get_object_or_404(Article, pk=pk)
