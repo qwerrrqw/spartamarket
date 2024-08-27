@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 
 from products.models import Article
 from .models import Profile
+from .models import Profile
 from .forms import ProfileForm
 
 # Create your views here.
@@ -41,6 +42,23 @@ def like(request, pk):
 
 
 def follow(request, user_id):
+
+    if request.user.is_authenticated: # 로그인이 되어 있는 경우
+        member = get_object_or_404(Profile, user__id=user_id) # 조회할 프로필
+        now_user = get_object_or_404(Profile, user__id=request.user.id) # 현재 로그인한 유저의 프로필
+
+        if member != now_user: #현재 로그인한 유저와 조화할 프로필이 같지 않은 경우
+            if now_user in member.followers.all(): # 팔로우가 되어있는 경우
+                member.followers.remove(now_user) # 팔로우 취소
+            else:
+                member.followers.add(now_user) # 팔로우하기
+        return redirect("users:profile", member.user.id)
+    else:
+        return redirect("accounts:login")
+
+
+
+def follow(request, user_id):
     if request.user.is_authenticated: # 로그인이 되어 있는 경우
         member = get_object_or_404(Profile, user__id=user_id) # 조회할 프로필
         now_user = get_object_or_404(Profile, user__id=request.user.id) # 현재 로그인한 유저의 프로필
@@ -59,8 +77,8 @@ def update_profile(request, user_id):
     user_profile = Profile.objects.get(user=request.user)
     if request.method == "POST":
         form = ProfileForm(request.POST, files=request.FILES,
-                           instance=user_profile
-                           )
+                        instance=user_profile
+                        )
         if form.is_valid():
             form.save()
             return redirect("users:profile", user_id)

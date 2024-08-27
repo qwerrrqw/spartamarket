@@ -12,5 +12,13 @@ class CreatedForm(forms.ModelForm):
             "like_users",
         )
 
+    def __init__(self, *args, **kwargs):
+        super(CreatedForm, self).__init__(*args, **kwargs)
+        if self.instance.pk:
+            hashtags = self.instance.hashtags.all()
+            initial_hashtags = ' '.join([f"#{hashtag.content}" for hashtag in hashtags])
+            self.initial['hashtags'] = initial_hashtags
+
 class SearchForm(forms.Form):
     search_word = forms.CharField(label="검색")
+

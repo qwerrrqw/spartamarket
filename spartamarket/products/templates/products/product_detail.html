@@ -1,38 +1,65 @@
-{% extends 'base.html'%}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/product_detail.css' %}">
+{% endblock head %}
 
 {% block content %}
-<h1>상품 정보</h1>
-
-<p>제목 : {{product.title}}</p>
-<div>
-    <p>작성자 : <a href="{% url 'users:profile' product.author.pk %}">
-        {{ product.author }}</p>
-    </a>
-</div>
-
-<p>해시태그: 
-    {% for hashtag in hashtags %}
-        <a href="{% url 'products:hashtag' hashtag.pk %}">#{{ hashtag.content }}</a> 
-    {% endfor %}
-</p>
-
-    <form action="{% url 'users:like' product.pk %}" method="POST">
-    {% csrf_token %}
-    {% if request.user in product.like_users.all %}
-        <button type="sumbit">좋아요 누른 상태</button>
-        {% else %}
-        <button type="sumbit">좋아요 안 누른 상태</button>
-    {% endif %} 
-    
-    <p>좋아요 수 : {{ product.like_users.count }}</p>
-    </form>
-<p>내용 : {{product.content}}</p>
-
-<form action="{% url 'products:delete' product.pk %}" method="POST">
-    {% csrf_token %}
-    <input type="submit" value="삭제">
-</form>
-<a href="{% url 'products:edit' product.pk %}"><button>글수정</button></a>
-
+  <section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+      <div class="row gx-4 gx-lg-5 align-items-center">
+        <div class="col-md-6">
+          <img class="card-img-top mb-5 mb-md-0" src="{% if product.image %}{{ product.image.url }}{% else %}https://dummyimage.com/600x700/dee2e6/6c757d.jpg{% endif %}" alt="Product Image">
+        </div>
+        <div class="col-md-6">
+          <div class="small mb-1">작성자: <a href="{% url 'users:profile' product.author.pk %}">{{ product.author }}</a></div>
+          <h1 class="display-5 fw-bolder">{{ product.title }}</h1>
+          <div class="fs-5 mb-5">
+            <span class="text-decoration-line-through">$45.00</span>
+            <span>$40.00</span>
+            {% for hashtag in hashtags %}
+              <a href="{% url 'products:hashtag' hashtag.pk %}">#{{ hashtag.content }}</a>
+            {% endfor %}
+          </div>
+          <p class="lead">{{ product.content }}</p>
+          <div class="d-flex">
+            
+            <form action="{% url 'users:like' product.pk %}" method="POST">
+                {% csrf_token %}
+                {% if request.user in product.like_users.all %}
+                  <button class="btn btn-outline-dark flex-shrink-0" type="submit">취소하기</button>
+                {% else %}
+                  <button class="btn btn-outline-dark flex-shrink-0" type="submit">찜하기</button>
+                {% endif %}
+              </form>
+          </div>
+          <div class="like-info">
+            {% comment %} <form action="{% url 'users:like' product.pk %}" method="POST">
+              {% csrf_token %}
+              {% if request.user in product.like_users.all %}
+                <button class="btn btn-outline-dark flex-shrink-0" type="button">좋아요 누른 상태</button>
+              {% else %}
+                <button class="btn btn-outline-dark flex-shrink-0" type="button">좋아요 안 누른 상태</button>
+              {% endif %}
+            </form> {% endcomment %}
+            <br>
+            <br>
+            <p>좋아요 수: {{ product.like_users.count }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <hr>
+    <div class="action-buttons">
+      <form action="{% url 'products:delete' product.pk %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="삭제">
+      </form>
+      <a href="{% url 'products:update' product.pk %}">
+        <button>글 수정</button>
+      </a>
+    </div>
+  </div>
 {% endblock content %}
-

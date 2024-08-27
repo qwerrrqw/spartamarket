@@ -29,7 +29,7 @@
     
     {% for article in articles %}
         <a href="{% url 'products:product_detail' article.pk %}">
-    	<p>{{ article.title }}</p>
+    	<p>[{{article.id}}]{{article.title}}</p>
         </a>
     {% endfor %}
 

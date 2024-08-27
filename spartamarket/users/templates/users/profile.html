@@ -3,7 +3,7 @@
 
 {% block head %}
 
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/product_detail.css' %}">
 
 {% endblock head %}
 
@@ -16,7 +16,7 @@
   <div class="row g-0">
     <div class="col-md-4">
 {#      <img src="..." class="img-fluid rounded-start" alt="...">#}
-        <img src="{{ member.image.url }}" alt = "{{ member.image }}" class="img-fluid rounded-start">
+        <img src="{{ member.image.url }}" alt = "{{ member.image }}" class="img-fluid rounded-start" >
         <h5 class="card-title d-flex justify-content-center">{{ member.user.username }}</h5>
     </div>
     <div class="col-md-8">
