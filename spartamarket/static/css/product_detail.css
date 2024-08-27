@@ -1,0 +1,21 @@
+/* product_detail.css */
+
+/* 좋아요 버튼과 좋아요 수, 삭제 및 수정 버튼을 수평으로 정렬 */
+.like-action-section {
+    display: flex;
+    justify-content: space-between; /* 요소를 양 끝으로 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    margin-top: 20px; /* 상단 여백 추가 */
+  }
+  
+  .like-info {
+    display: flex;
+    align-items: center; /* 수직 중앙 정렬 */
+    gap: 10px; /* 좋아요 버튼과 좋아요 수 사이의 간격 설정 */
+  }
+  
+  .action-buttons {
+    display: flex;
+    align-items: center; /* 수직 중앙 정렬 */
+    gap: 10px; /* 삭제와 수정 버튼 사이의 간격 설정 */
+  }
