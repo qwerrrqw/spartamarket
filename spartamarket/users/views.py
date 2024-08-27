@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 
 from products.models import Article
 from .models import Profile
+from .forms import ProfileForm
 
 # Create your views here.
 
@@ -52,3 +53,21 @@ def follow(request, user_id):
         return redirect("users:profile", member.user.id)
     else:
         return redirect("accounts:login")
+
+
+def update_profile(request, user_id):
+    user_profile = Profile.objects.get(user=request.user)
+    if request.method == "POST":
+        form = ProfileForm(request.POST, files=request.FILES,
+                           instance=user_profile
+                           )
+        if form.is_valid():
+            form.save()
+            return redirect("users:profile", user_id)
+    else:
+        form = ProfileForm(instance=user_profile)
+    context = {
+        "form": form,
+    }
+
+    return render(request, "users/update_profile.html", context)

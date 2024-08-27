@@ -55,10 +55,9 @@ def product_detail(request, pk):
     product = get_object_or_404(Article, pk=pk)
     hashtags = product.hashtags.all() 
     context = { 
-            'product':product,
+            'product': product,
             'hashtags': hashtags,
             }
-    
 
     return render(request, 'products/product_detail.html', context)
 
@@ -79,7 +78,7 @@ def edit(request, pk):
     return render(request, "products/edit.html", context)
 
 
-# Update view
+
 @login_required
 def update(request, pk):
     product = get_object_or_404(Article, pk=pk)
@@ -115,12 +114,25 @@ def update(request, pk):
 
 def search(request):
     search_word = request.GET.get("search_word")
-    article_list = Article.objects.filter(
-        Q(title__icontains=search_word) |
-        Q(content__icontains=search_word) |
-        Q(author__username__icontains=search_word)
-        # 해시태그 추가 필요
-    ).distinct()
+    search_type = request.GET.get("type")  # 검색 타입 추가
+
+    # 검색 타입에 따라 필터링
+    if search_type == 'title':
+        article_list = Article.objects.filter(Q(title__icontains=search_word)).distinct()
+    elif search_type == 'content':
+        article_list = Article.objects.filter(Q(content__icontains=search_word)).distinct()
+    elif search_type == 'author':
+        article_list = Article.objects.filter(Q(author__username__icontains=search_word)).distinct()
+    elif search_type == 'hashtag':  # 해시태그로 검색하는 경우
+        article_list = Article.objects.filter(Q(hashtags__content__icontains=search_word)).distinct()
+    else:
+        # 기본적으로 제목, 내용, 작성자 모두를 검색
+        article_list = Article.objects.filter(
+            Q(title__icontains=search_word) |
+            Q(content__icontains=search_word) |
+            Q(author__username__icontains=search_word) |
+            Q(hashtags__content__icontains=search_word)  # 해시태그 추가
+        ).distinct()
 
     context = {
         "search_word": search_word,
@@ -128,8 +140,6 @@ def search(request):
     }
 
     return render(request, "products/search.html", context)
-
-
 
 
 @login_required
