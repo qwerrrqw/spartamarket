@@ -68,23 +68,11 @@ def delete(request, pk):
     return redirect("products:product")
 
 
-@login_required
-def edit(request, pk):
-    product = get_object_or_404(Article, pk=pk)
-    context = {
-        "product" : product,
-    }
-    return render(request, "products/edit.html", context)
-
 
 
 @login_required
 def update(request, pk):
     product = get_object_or_404(Article, pk=pk)
-
-    product.title = request.POST.get("title")
-    product.content = request.POST.get("content")
-    product.save()
     
     if request.method == "POST":
         form = CreatedForm(request.POST, request.FILES, instance=product)
@@ -107,7 +95,7 @@ def update(request, pk):
     else:
         form = CreatedForm(instance=product)
     context = {"form": form, "product": product}
-    return render(request, "products/edit.html", context)
+    return render(request, "products/update.html", context)
 
 
 
