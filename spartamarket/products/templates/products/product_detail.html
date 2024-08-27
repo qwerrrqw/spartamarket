@@ -6,6 +6,12 @@
 <p>제목 {{product.title}}</p>
 <p>작성자 {{request.user.username}}</p>
 
+<p>해시태그: 
+    {% for hashtag in hashtags %}
+        <a href="{% url 'products:hashtag' hashtag.pk %}">#{{ hashtag.content }}</a> 
+    {% endfor %}
+</p>
+
     <form action="{% url 'users:like' product.pk %}" method="POST">
     {% csrf_token %}
     {% if request.user in product.like_users.all %}
@@ -13,6 +19,8 @@
         {% else %}
         <button type="sumbit">좋아요 안 누른 상태</button>
     {% endif %} 
+    
+    <p>좋아요 수 : {{ product.like_users.count }}</p>
     </form>
 <p>내용 {{product.content}}</p>
 

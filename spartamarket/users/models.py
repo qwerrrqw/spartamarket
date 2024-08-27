@@ -12,4 +12,8 @@ class Profile(models.Model):
     image = models.ImageField(default="users/user.png", upload_to="images/")
     created_at = models.DateTimeField(default=timezone.now)
 
-    followings = models.ManyToManyField('self', related_name="followers", symmetrical=False)
+    following = models.ManyToManyField(
+        to="self",
+        related_name="followers",
+        symmetrical=False,
+    )

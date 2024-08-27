@@ -6,6 +6,7 @@ from django.contrib.auth import update_session_auth_hash
 from users.models import Profile
 
 from .forms import CustomUserCreationForm,CustomUserChangeForm
+from users.models import Profile
 # Create your views here.
 
 
@@ -14,7 +15,7 @@ def login(request):
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
             auth_login(request, form.get_user())
-            return redirect("index")
+            return redirect("products:product")
     else:
         form = AuthenticationForm()
     context = {"form": form}
@@ -33,6 +34,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             auth_login(request, user)
+            Profile.objects.create(user=user) # 프로필 생성하기
             return redirect("products:product")
     else:
         form = CustomUserCreationForm()

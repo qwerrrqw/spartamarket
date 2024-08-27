@@ -1,14 +1,28 @@
 {%  extends 'base.html' %}
 
 {% block content %}
+
 	<h1>상품목록</h1>
 
     <a href="{% url 'products:create' %}"><button>게시글 작성하기</button></a>
+
+        <form action="{% url 'products:product' %}" method="GET">
+            <select name="sort" id="sort">
+                <option value="recently" name="recently">최신순 정렬하기</option>
+                <option value="likes" name="likeㄴ">좋아요순 정렬하기</option>
+            </select>
+            <button type="submit">정렬하기</button>
+        </form>
+
+    <form action="{% url 'products:search' %}" method="GET">
+    {{ search_form.as_p}}
+        <button type="submit">검색</button>
+    </form>
     
     {% for article in articles %}
         <a href="{% url 'products:product_detail' article.pk %}">
     	<p>{{ article.title }}</p>
         </a>
     {% endfor %}
-    
+
 {% endblock content %}

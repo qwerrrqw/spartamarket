@@ -5,20 +5,25 @@ from django.contrib.auth import get_user_model
 
 from products.models import Article
 from .models import Profile
+from .models import Profile
 
 # Create your views here.
 
 
 def profile(request, user_id):
-    user = request.user
-    # products = user.like_users.filter(user_id=user)
+    user = get_object_or_404(get_user_model(), id=user_id)
 
-    my_user = get_object_or_404(get_user_model(), id=user_id)
-    products = my_user.like_articles.all()
+    member = Profile.objects.get(user__id=user_id)  # 조화하려는 프로필
+    now_user = Profile.objects.get(user__id=request.user.id)  # 현재 로그인한 유저
+
+    like_posts = user.like_articles.all() # 조화하려는 프로필 유저가 좋아요한 게시글
+    write_posts = user.articles.all() # 조회하려는 프로필 유저가 작성한 게시글
 
     context = {
-        "user": my_user,
-        "products": products,
+        "member": member,
+        "now_user": now_user,
+        "like_posts": like_posts,
+        "write_posts": write_posts,
     }
     return render(request, 'users/profile.html', context)
 
@@ -27,20 +32,40 @@ def like(request, pk):
     product = get_object_or_404(Article, pk=pk)
     if product.like_users.filter(pk=request.user.pk).exists():
         product.like_users.remove(request.user)
-        print("like_false")
+        # product.like_count -= 1
     else:
         product.like_users.add(request.user)
-        print("like_true")
+        # product.like_count += 1
     return redirect("products:product_detail", pk=pk)
 
 
 def follow(request, user_id):
-    member = get_user_model().objects.get(id=user_id)
-    print(member)
-    print(dir(member))
-    print(member.profile)
-    if  member.followers.filter(pk=request.user.pk).exists():
-        member.followers.remove(request.user)
+
+    if request.user.is_authenticated: # 로그인이 되어 있는 경우
+        member = get_object_or_404(Profile, user__id=user_id) # 조회할 프로필
+        now_user = get_object_or_404(Profile, user__id=request.user.id) # 현재 로그인한 유저의 프로필
+
+        if member != now_user: #현재 로그인한 유저와 조화할 프로필이 같지 않은 경우
+            if now_user in member.followers.all(): # 팔로우가 되어있는 경우
+                member.followers.remove(now_user) # 팔로우 취소
+            else:
+                member.followers.add(now_user) # 팔로우하기
+        return redirect("users:profile", member.user.id)
     else:
-        member.followers.add(request.user)
-    return redirect('users:profile', member.username)
+        return redirect("accounts:login")
+
+
+
+def follow(request, user_id):
+    if request.user.is_authenticated: # 로그인이 되어 있는 경우
+        member = get_object_or_404(Profile, user__id=user_id) # 조회할 프로필
+        now_user = get_object_or_404(Profile, user__id=request.user.id) # 현재 로그인한 유저의 프로필
+
+        if member != now_user: #현재 로그인한 유저와 조화할 프로필이 같지 않은 경우
+            if now_user in member.followers.all(): # 팔로우가 되어있는 경우
+                member.followers.remove(now_user) # 팔로우 취소
+            else:
+                member.followers.add(now_user) # 팔로우하기
+        return redirect("users:profile", member.user.id)
+    else:
+        return redirect("accounts:login")
