@@ -6,12 +6,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Document</title>
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+    
 
-    * {
-        font-family: 'Noto Sans KR', sans-serif;
-    }
-
+    
     body {
         margin: 0;
         background-color: #329fbb;
@@ -20,7 +17,7 @@
         /* border: 3px solid red; */
         border-radius: 5px;
         width: 300px;
-        background-color: #eeeff1;
+        background-color: #dce0e7;
         padding:20px;
         margin : 50px auto;
     }
@@ -32,14 +29,10 @@
 {% endblock head %}
 
 {% block content %}
-<!-- <h1> 로그인 페이지 </h1>
 
-<form action="{% url "accounts:login" %}" method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="로그인">
-</form> -->
-
+<div class="d-flex justify-content-center">
+    <h1>로그인</h1>
+</div>
 <div class="login-form">
     <form action="{% url "accounts:login" %}" method="POST">
         {% csrf_token %}

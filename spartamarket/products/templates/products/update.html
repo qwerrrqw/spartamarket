@@ -1,13 +1,45 @@
 {% extends "base.html" %}
 
-{% block content %}
-<h1>Update Product</h1>
+{% block head %}
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Document</title>
+<style>
+    
 
+    
+    body {
+        margin: 0;
+        background-color: #329fbb;
+    }
+    .update-form{
+        /* border: 3px solid red; */
+        border-radius: 5px;
+        width: 380px;
+        background-color: #dce0e7;
+        padding:20px;
+        margin : 50px auto;
+    }
+    
+   
+</style>
+
+    
+{% endblock head %}
+
+
+{% block content %}
+<div class="d-flex justify-content-center">
+    <h1>게시글 수정</h1>
+</div>
+<div class="update-form">
 <form action="{% url 'products:update' product.pk %}" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
 
     <button type="submit">저장</button>
 </form>
+</div>
 
 {% endblock content %}
