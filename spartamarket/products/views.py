@@ -62,12 +62,14 @@ def product_detail(request, pk):
     return render(request, 'products/product_detail.html', context)
 
 
+@login_required
 def delete(request, pk):
     product = Article.objects.get(pk=pk)
     product.delete()
     return redirect("products:product")
 
 
+@login_required
 def edit(request, pk):
     product = get_object_or_404(Article, pk=pk)
     context = {
