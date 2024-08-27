@@ -13,8 +13,13 @@
 
     <p> 가입일: {{ member.user.date_joined }}</p>
 
-    <img src=" {% static 'users/user.png' %}">
-    
+    <img src="{{ member.image.url }}" alt = {{ member.image }}>
+
+
+    {% if member == now_user %}
+    <a href="{% url 'users:update_profile' member.user.id %}"><button>프로필 수정하기</button></a>
+    {% endif %}
+
     
     {% if now_user != member %}
     <form action="{% url 'users:follow' member.user.id %}" method="POST">

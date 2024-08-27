@@ -55,10 +55,9 @@ def product_detail(request, pk):
     product = get_object_or_404(Article, pk=pk)
     hashtags = product.hashtags.all() 
     context = { 
-            'product':product,
+            'product': product,
             'hashtags': hashtags,
             }
-    
 
     return render(request, 'products/product_detail.html', context)
 
@@ -126,8 +125,6 @@ def search(request):
     }
 
     return render(request, "products/search.html", context)
-
-
 
 
 @login_required
