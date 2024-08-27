@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm,UserChangeForm   
 from django.contrib.auth import get_user_model
 from django.urls import reverse
+from django import forms
 
 
 # class CustomUserCreationForm(UserCreationForm):
@@ -21,6 +22,20 @@ class CustomUserChangeForm(UserChangeForm):
             "username",
             "email",
         )
+
+        widgets = {
+            'username': forms.TextInput(
+                attrs={'class': 'form-control',
+                       'placeholder': '150자 이내로 문자, 숫자, @/./+/- 만 입력 가능합니다.'}),
+            'email': forms.EmailInput(
+                attrs={'class': 'form-control',
+                       'placeholder': 'email'}
+            )
+        }
+
+        label = {
+            "username": "ID",
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -9,55 +9,79 @@
 
 
 {% block content %}
-    <h1> {{ member.user.username }} </h1>
 
-    <p> 가입일: {{ member.user.date_joined }}</p>
+    <div class="container d-flex justify-content-center">
 
-    <img src="{{ member.image.url }}" alt = {{ member.image }}>
+    <div class="card mb-3" style="max-width: 540px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+{#      <img src="..." class="img-fluid rounded-start" alt="...">#}
+        <img src="{{ member.image.url }}" alt = "{{ member.image }}" class="img-fluid rounded-start">
+        <h5 class="card-title d-flex justify-content-center">{{ member.user.username }}</h5>
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <p class="card-text">
+            가입일: {{ member.user.date_joined }}
+        </p>
 
+        <p class="card-text"><small class="text-body-secondary">
+            팔로우수 : {{ member.following.count }}
+        </small></p>
+          <p class="card-text"><small class="text-body-secondary">
+            팔로워수 : {{ member.followers.count }}
+        </small></p>
 
-    {% if member == now_user %}
-    <a href="{% url 'users:update_profile' member.user.id %}"><button>프로필 수정하기</button></a>
-    {% endif %}
-
-    
-    {% if now_user != member %}
-    <form action="{% url 'users:follow' member.user.id %}" method="POST">
-    {% csrf_token %}
-
-        {% if now_user in member.followers.all %}
-            <input type="submit" value="팔루우중">
-        {% else %}
-            <input type="submit" value="팔로우하기">
+          {% if now_user != member %}
+            <form action="{% url 'users:follow' member.user.id %}" method="POST">
+            {% csrf_token %}
+            {% if now_user in member.followers.all %}
+                <input type="submit" value="팔루우중">
+            {% else %}
+                <input type="submit" value="팔로우하기">
+            {% endif %}
+            </form>
         {% endif %}
 
-    </form>
+      {% if member == now_user %}
+    <a href="{% url 'users:update_profile' member.user.id %}"><button>프로필 이미지 수정하기</button></a>
     {% endif %}
 
-    <div>
-    <p>가입일 : {{ member.user.date_joined }}</p>
-    <p>팔로우수 : {{ member.following.count }}</p>
-    <p>팔로워수 : {{ member.followers.count }}</p>
+      </div>
     </div>
-
-    <div>
-        <h4>{{ member.user.username }}님이 좋아요한 게시물</h4>
-    {% for like_post in like_posts %}
-    	<li><a href="{% url 'products:product_detail' like_post.pk %}">{{ like_post.title }}</a></li>
-    {% endfor %}
+  </div>
+</div>
 
     </div>
 
-    <div>
-        <h4>{{ member.user.username }}님이 작성한 게시물</h4>
-    {% for write_post in write_posts %}
-    	<li><a href="{% url 'products:product_detail' write_post.pk %}">{{ write_post.title }}</a></li>
-    {% endfor %}
+<div class="container">
 
+<div class="row d-flex justify-content-center">
+
+    <div class="card border-light mb-3" style="max-width: 18rem;">
+        <div class="card-header">{{ member.user.username }}님이 좋아요한 게시물</div>
+            <div class="card-body">
+                {% for like_post in like_posts %}
+    	        <p><a href="{% url 'products:product_detail' like_post.pk %}">{{ like_post.title }}</a></p>
+                {% endfor %}
+        </div>
     </div>
 
-    <a href="{% url 'accounts:update' %}"><button>회원정보 수정</button></a>
-    <a href="{% url 'products:product' %}"><button>홈으로 돌아가기</button></a>
+
+    <div class="card border-light mb-3" style="max-width: 18rem;">
+        <div class="card-header">{{ member.user.username }}님이 작성한 게시물</div>
+            <div class="card-body">
+                {% for write_post in write_posts %}
+    	        <p><a href="{% url 'products:product_detail' write_post.pk %}">{{ write_post.title }}</a></p>
+                {% endfor %}
+        </div>
+
+</div>
+
+
+</div>
+
+    </div>
 
 {% endblock content %}
 
