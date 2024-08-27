@@ -1,5 +1,4 @@
 from django.db.models import Count, Q
-
 from django.shortcuts import render, redirect
 from .forms import CreatedForm, SearchForm
 from django.contrib.auth.decorators import login_required
