@@ -12,6 +12,5 @@ class CreatedForm(forms.ModelForm):
             "like_users",
         )
 
-
 class SearchForm(forms.Form):
     search_word = forms.CharField(label="검색")
