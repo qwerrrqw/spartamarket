@@ -1,3 +1,6 @@
+![image](https://github.com/user-attachments/assets/69bf68ed-0e78-42fe-9bbe-029fb5eb2d8c)
+
+
 # team project: "spartamarket"
 
 ## Table of Contents
