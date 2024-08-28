@@ -13,10 +13,10 @@
         margin: 0;
         background-color: #329fbb;
     }
-    .login-form{
+    .create-form{
         /* border: 3px solid red; */
         border-radius: 5px;
-        width: 300px;
+        width: 380px;
         background-color: #dce0e7;
         padding:20px;
         margin : 50px auto;
@@ -28,19 +28,22 @@
     
 {% endblock head %}
 
+
 {% block content %}
 
-<div class="d-flex justify-content-center">
-    <h1>로그인</h1>
-</div>
-<div class="login-form">
-    <form action="{% url "accounts:login" %}" method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-    <input type="submit" value="로그인">
-    </form>
-</div>
 
+
+
+<div class="d-flex justify-content-center">
+    <h1>상품 등록</h1>
+</div>
+<div class="create-form">
+<form action="{% url 'products:create' %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">작성완료</button>
+</form>
+</div>
 
 
 {% endblock content %}

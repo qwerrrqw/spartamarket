@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block head %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/product_detail.css' %}">
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap');
+
+  * {
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+
+  body {
+    margin: 0;
+    background-color: #329fbb;
+  }
+
+  .topcontainer {
+    /* border: 3px solid red; */
+    border-radius: 5px;
+    width: 700px;
+    background-color: #eeeff1;
+    padding: 20px;
+    margin: 50px auto;
+  }
+</style>
+{% endblock head %}
+
+
+
+{% block content %}
+
+<div class="topcontainer">
+  <div class="container d-flex justify-content-center">
+
+    <div class="card mb-3" style="max-width: 540px;">
+      <div class="row g-0">
+        <div class="col-md-4">
+          {# <img src="..." class="img-fluid rounded-start" alt="...">#}
+          <img src="{{ member.image.url }}" alt="{{ member.image }}" class="img-fluid rounded-start">
+          <h5 class="card-title d-flex justify-content-center">{{ member.user.username }}</h5>
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <p class="card-text">
+              가입일: {{ member.user.date_joined }}
+            </p>
+  
+            <p class="card-text"><small class="text-body-secondary">
+                팔로우수 : {{ member.following.count }}
+              </small></p>
+            <p class="card-text"><small class="text-body-secondary">
+                팔로워수 : {{ member.followers.count }}
+              </small></p>
+  
+            {% if now_user != member %}
+            <form action="{% url 'users:follow' member.user.id %}" method="POST">
+              {% csrf_token %}
+              {% if now_user in member.followers.all %}
+              <input type="submit" value="팔루우중">
+              {% else %}
+              <input type="submit" value="팔로우하기">
+              {% endif %}
+            </form>
+            {% endif %}
+  
+            {% if member == now_user %}
+            <a href="{% url 'users:update_profile' member.user.id %}"><button>프로필 이미지 수정하기</button></a>
+            {% endif %}
+  
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  </div>
+  
+  <div class="container">
+  
+    <div class="row d-flex justify-content-center">
+  
+      <div class="card border-light mb-3" style="max-width: 18rem;">
+        <div class="card-header">{{ member.user.username }}님이 좋아요한 게시물</div>
+        <div class="card-body">
+          {% for like_post in like_posts %}
+          <p><a href="{% url 'products:product_detail' like_post.pk %}">{{ like_post.title }}</a></p>
+          {% endfor %}
+        </div>
+      </div>
+  
+  
+      <div class="card border-light mb-3" style="max-width: 18rem;">
+        <div class="card-header">{{ member.user.username }}님이 작성한 게시물</div>
+        <div class="card-body">
+          {% for write_post in write_posts %}
+          <p><a href="{% url 'products:product_detail' write_post.pk %}">{{ write_post.title }}</a></p>
+          {% endfor %}
+        </div>
+  
+      </div>
+    </div>
+  
+  </div>
+
+</div>
+
+
+
+{% endblock content %}
