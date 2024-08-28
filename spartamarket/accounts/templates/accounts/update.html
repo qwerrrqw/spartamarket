@@ -37,14 +37,7 @@
 
             <form action="{% url 'accounts:update'%}" method="POST">
                 {% csrf_token %}
-                <div class="m-1">
-                    <label for="">username : </label>
-                    {{ form.username }}
-                </div>
-                <div class="m-1">
-                    <label for="">email : </label>
-                    {{ form.email }}
-                </div>
+                {{form.as_p}}
                 <button type="submit" class="m-1">수정하기</button>
             </form>
 
