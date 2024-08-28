@@ -4,10 +4,6 @@ from django.urls import reverse
 from django import forms
 
 
-# class CustomUserCreationForm(UserCreationForm):
-#     class Meta:
-#         fields = "__all__"
-
 class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = get_user_model()
@@ -43,5 +39,5 @@ class CustomUserChangeForm(UserChangeForm):
         if password:
             password_help_text = (
                 "You can change the password " '<a href="{}">here</a>.'
-            ).format(f"{reverse('accounts:password_change')}") #format 뒤에 값이 href 뒤 {}에 들어간다 
+            ).format(f"{reverse('accounts:password_change')}")
             self.fields["password"].help_text = password_help_text

@@ -4,7 +4,6 @@ from django.conf import settings
 
 class Hashtag(models.Model):
     content = models.CharField(max_length=30, unique=True)
-    # articles = models.ManyToManyField('Article', related_name='hashtag_articles')
 
     def __str__(self):
         return self.content

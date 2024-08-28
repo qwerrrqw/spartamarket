@@ -10,9 +10,9 @@ from .models import Article, Hashtag
 def product(request):
     sort = request.GET.get("sort", "")
     if sort == "likes":
-        articles = Article.objects.annotate(like_count=Count("like_users")).order_by("-like_count", "-created_at") # 좋아요순 정렬, 동일한 좋아요 순서일 시 최신순으로 정렬
+        articles = Article.objects.annotate(like_count=Count("like_users")).order_by("-like_count", "-created_at")
     else:
-        articles = Article.objects.all().order_by("-created_at") # 기본 정렬 : 최신순
+        articles = Article.objects.all().order_by("-created_at")
 
     search_form = SearchForm()
 
@@ -24,17 +24,14 @@ def product(request):
     return render(request, "products/product.html", context)
 
 
-# Create view
 @login_required
 def create(request):
     if request.method == "POST":
-        form = CreatedForm(request.POST, request.FILES)  # FIlES 추가
+        form = CreatedForm(request.POST, request.FILES)
         if form.is_valid():
             article = form.save(commit=False)
             article.author = request.user
             article.save()
-
-            # 해시태그 파싱 및 저장
             hashtags_input = form.cleaned_data.get('hashtags', '')
             hashtags = set(word for word in hashtags_input.split() if word.startswith('#'))
             for hashtag in hashtags:
@@ -78,8 +75,6 @@ def update(request, pk):
             article = form.save(commit=False)
             article.author = request.user
             article.save()
-
-            # 기존 해시태그를 지우고 새로 추가
             article.hashtags.clear()
             hashtags_input = form.cleaned_data.get('hashtags', '')
             hashtags = set(word for word in hashtags_input.split() if word.startswith('#'))
@@ -99,24 +94,21 @@ def update(request, pk):
 
 def search(request):
     search_word = request.GET.get("search_word")
-    search_type = request.GET.get("type")  # 검색 타입 추가
-
-    # 검색 타입에 따라 필터링
+    search_type = request.GET.get("type")
     if search_type == 'title':
         article_list = Article.objects.filter(Q(title__icontains=search_word)).distinct()
     elif search_type == 'content':
         article_list = Article.objects.filter(Q(content__icontains=search_word)).distinct()
     elif search_type == 'author':
         article_list = Article.objects.filter(Q(author__username__icontains=search_word)).distinct()
-    elif search_type == 'hashtag':  # 해시태그로 검색하는 경우
+    elif search_type == 'hashtag':
         article_list = Article.objects.filter(Q(hashtags__content__icontains=search_word)).distinct()
     else:
-        # 기본적으로 제목, 내용, 작성자 모두를 검색
         article_list = Article.objects.filter(
             Q(title__icontains=search_word) |
             Q(content__icontains=search_word) |
             Q(author__username__icontains=search_word) |
-            Q(hashtags__content__icontains=search_word)  # 해시태그 추가
+            Q(hashtags__content__icontains=search_word)
         ).distinct()
 
     context = {

@@ -7,7 +7,6 @@ from users.models import Profile
 
 from .forms import CustomUserCreationForm,CustomUserChangeForm
 from users.models import Profile
-# Create your views here.
 
 
 def login(request):
@@ -34,7 +33,7 @@ def signup(request):
         if form.is_valid():
             user = form.save()
             auth_login(request, user)
-            Profile.objects.create(user=user) # 프로필 생성하기
+            Profile.objects.create(user=user)
             return redirect("products:product")
     else:
         form = CustomUserCreationForm()
