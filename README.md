@@ -82,3 +82,91 @@ users(프로필): 유저의 프로필을 담당하는 앱으로 프로필 accoun
 
 - 팀 깃허브 : https://github.com/qwerrrqw/spartamarket
 - 팀 노션:  https://teamsparta.notion.site/963a497589134132aa7ac8081a9a6acc
+
+
+------------------------------------------------
+
+
+# Team Project: "Spartamarket"
+
+## Table of Contents
+- [Project Description](#project-description)
+- [Team Members and Roles](#team-members-and-roles)
+- [Project Structure and Features](#project-structure-and-features)
+    - [Accounts](#accounts)
+    - [Products](#products)
+    - [Users](#users)
+- [Technologies Used](#technologies-used)
+- [Team Notion and GitHub Repository](#team-notion-and-github-repository)
+
+## Project Description
+
+Team project: Creating a second-hand marketplace, "Spartamarket."
+
+This is the first step for beginner developers in Django and GitHub.
+
+## Team Members and Roles
+
+**Naji Soo (Team Leader):**  
+Implemented login/logout, hashtag functionality, applied CSS to the hashtag search page, product page, and product detail page, wrote the profile page, service architecture, and README.
+
+**Park Yeon Jae (Secretary):**  
+Implemented signup, post creation, post liking, following, post sorting, post search, profile image editing, applied CSS to the profile page, profile update page, and personal information editing page, and drafted the presentation.
+
+**Kim Dong Yong (Team Member):**  
+Updated SA template, implemented member information editing, password change, product detail page, post editing, applied CSS to accounts and product pages, modified hashtag functionality, and optimized the update page.
+
+**Lee Ye Ji (Team Member):**  
+Updated wireframes, implemented post deletion, applied CSS to the product page, added interaction buttons to each page, and separated screens for logged-in and non-logged-in users.
+
+**Joint Work (Screen Sharing, Pair Programming):**  
+Skeleton code, member functions, user functions, post functions, wireframes, ERD, and SA documentation.
+
+## Project Structure and Features
+
+Our project is composed of three apps: `accounts`, `products`, and `users`.
+
+### Products
+
+**Products (Post Functionality):**  
+The main feature of the project, where users can create, search, edit, and delete posts.
+
+- Create posts
+- Sort posts by latest or likes
+- Search posts by title/content/author/hashtag
+- Navigate to the author's profile from the post detail page
+- View posts grouped by related hashtags
+- Like posts and view the number of likes
+- Delete and edit posts
+
+### Accounts
+
+**Accounts (Membership Features):**  
+Handles user membership, ensuring that even if other parts of the project experience issues, the membership functionality and sensitive information remain unaffected by separating the profile function.
+
+- Login
+- Logout
+- Delete account
+- Edit account information
+- Login and signup are available before logging out or registering
+
+### Users
+
+**Users (Profile Features):**  
+Manages user profiles, creating the profile page based on user information from `accounts`. On the profile page, users can view their own posts, liked items, or check followers/following numbers through the follow feature.
+
+- View liked posts
+- View posts created by the user
+- Edit profile image / default image available
+- Follow/unfollow users, check the number of followers/following
+
+## Technologies Used
+- Django 4.2
+- Pycharm
+- VSCode
+- GitHub
+
+## Team Notion and GitHub Repository
+
+- [Team GitHub](https://github.com/qwerrrqw/spartamarket)
+- [Team Notion](https://teamsparta.notion.site/963a497589134132aa7ac8081a9a6acc)
