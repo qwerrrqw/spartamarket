@@ -51,10 +51,10 @@ accounts(회원기능): 회원기능만 담당하게 함으로서 다른 부분�
 users(프로필): 유저의 프로필을 담당하는 앱으로 프로필 accounts에서 받아온 유저 정보를 기반으로 프로필 페이지가 생성 되고, 프로필 페이지에선 내가 작성한 게시글과, 찜한 상품을 확인하거나, 팔로우 기능을 구현해서 내가 팔로우 한 사람, 혹은 나를 팔로우한 사람 수를 확인 할 수 있습니다.
 
 ## 사용한 기술
-Django 4.2
-Pycharm
-Vscode
-github
+- Django 4.2
+- Pycharm
+- Vscode
+- github
 
 ## 팀 노션 및 GitHub Repository
 
