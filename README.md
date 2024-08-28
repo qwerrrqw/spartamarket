@@ -80,9 +80,8 @@ users(프로필): 유저의 프로필을 담당하는 앱으로 프로필 accoun
 
 ## 팀 노션 및 GitHub Repository
 
-- 팀 깃허브 : https://github.com/qwerrrqw/spartamarket
-- 팀 노션:  https://teamsparta.notion.site/963a497589134132aa7ac8081a9a6acc
-
+- [Team GitHub](https://github.com/qwerrrqw/spartamarket)
+- [Team Notion](https://teamsparta.notion.site/963a497589134132aa7ac8081a9a6acc)
 
 ------------------------------------------------
 
